@@ -34,7 +34,7 @@ env.reset()
 lang = env.get_ep_meta()["lang"]
 print("Instruction:", lang)
 
-video_writer = imageio.get_writer(saving_path + "/my_rollout.mp4", fps=20)
+video_writer = imageio.get_writer(saving_path + "/trial.mp4", fps=20)
 
 for i in range(500):
     action = np.random.randn(*env.action_spec[0].shape) * 0.1
@@ -49,4 +49,4 @@ for i in range(500):
     video_writer.append_data(frame)
 
 video_writer.close()
-print("Video saved as my_rollout.mp4")
+print("Video saved as trial.mp4")
