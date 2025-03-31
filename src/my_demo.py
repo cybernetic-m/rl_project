@@ -58,9 +58,10 @@ env=Kitchen(
     render_camera=None,
     control_freq=20,
     renderer_config=renderer_configuration,
-    seed=2,
-    init_robot_base_pos="sink",
-    style_ids=7,#color of the kitchen 3 is ok 6 is the best until now
+    seed=3,
+    init_robot_base_pos="sink", #where to start the robot
+    layout_ids=-3, #island in the kitchen
+    style_ids=9,#color and style on the kithen
 )
 # reset the environment
 env.reset()
