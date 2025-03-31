@@ -11,6 +11,7 @@
 Firstly, to install the Robocasa Environment you need to have [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html), in order to create a conda environment. These are all the instructions to install conda (if you have conda, you can go to step 2).
 
 (On MacOS): 
+
 In MacOS you need to pay attention to the processor architecture!
 
 If you have INTEL processor, run:
