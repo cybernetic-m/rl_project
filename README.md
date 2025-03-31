@@ -38,7 +38,9 @@ Initialize conda for all available shells running the command:
   ```
 
 (On Windows):
+
 Open the command prompt and run:
+
   ```sh 
 curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe -o .\miniconda.exe
 start /wait "" .\miniconda.exe /S
@@ -46,23 +48,30 @@ del .\miniconda.exe
   ```
 
 (On Linux):
+
 Open the shell and run:
+
   ```sh 
 mkdir -p ~/miniconda3
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
 bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
 rm ~/miniconda3/miniconda.sh
   ```
+
 Refreshing the terminal using:
+
   ```sh 
  source ~/miniconda3/bin/activate
   ```
+
 Initialize conda for all available shells running the command:
+
   ```sh 
  conda init --all
   ```
 
 2. Install Robocasa Environment:
+
 Then you need to install the Robocasa Environment as described in the official [documentation](link1).
 
 The first passage is to create the conda environment
