@@ -1,7 +1,7 @@
 import os 
 import sys
 # Adjust this path to where your robocasa directory is
-current_dir = os.path.dirname(os.path.abspath(__file__))
+current_dir = os.path.dirname(os.path.abspath(__file__)) 
 repo_dir = os.path.abspath(os.path.join(current_dir, '..'))
 env_dir = os.path.abspath(os.path.join(current_dir, '..', '..'))
 robocasa_path = env_dir + "/robocasa"
@@ -17,6 +17,11 @@ from robocasa.utils.env_utils import create_env
 import numpy as np
 import imageio
 
+if sys.platform.startswith("win"):
+    print("You are on Windows")
+elif sys.platform == "darwin":
+    print("You are on MacOS")
+
 # choose random task
 env_name = np.random.choice(list(ALL_KITCHEN_ENVIRONMENTS))
 
@@ -30,9 +35,11 @@ env = create_env(
 # reset the environment
 env.reset()
 
+
 # get task language
 lang = env.get_ep_meta()["lang"]
 print("Instruction:", lang)
+
 
 video_writer = imageio.get_writer(saving_path + "/trial.mp4", fps=20)
 
