@@ -57,10 +57,11 @@ renderer_configuration={
     }
 '''
 
+renderer_on_screen=False
 env = PreSoakPan(
     robots="GR1FixedLowerBody", #type of the robot ["GR1"]
     #controller_configs=controller_config,
-    has_renderer=True, # True to activate online rendering to visualize the simulation
+    has_renderer=renderer_on_screen, # True to activate online rendering to visualize the simulation
     has_offscreen_renderer=True, # True to save the video offline 
     use_camera_obs=True, # True to take images from obs
     render_camera=None, # None to have the central camera that see all the robot (otherwise use another camera name from the list "Available Cameras")
@@ -114,7 +115,8 @@ for i in range(500):
     obs, reward, done, info = env.step(action)  # take action in the environment
 
     #obs['robot0_robotview_image']
-    env.render()  # render on display
+    if renderer_on_screen:
+        env.render()  # render on display
     
     if video_saving:
         frame = env.sim.render(
