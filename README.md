@@ -124,6 +124,13 @@ cd ..
 git clone https://github.com/cybernetic-m/rl_project.git
 ```
 
+To run the simulation:
+
+ ```sh 
+cd src
+python my_demo.py
+```
+
 If the simulation does not start, you may need to do ONE of these two commands:
 ```sh 
 pip install imageio[ffmpeg]
