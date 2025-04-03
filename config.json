@@ -2,5 +2,6 @@
     "has_render": "True",
     "has_offscreen_renderer": "True",
     "use_camera_obs": "True",
-    "render_camera": null
+    "render_camera": null,
+    "video_saving":"True"
 }

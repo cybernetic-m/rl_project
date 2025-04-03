@@ -1,20 +1,20 @@
 import os 
 import sys
 import json
-
+#from robocasa.environments import ALL_KITCHEN_ENVIRONMENTS
+#from robocasa.environments.kitchen.kitchen import Kitchen
+from robocasa.environments.kitchen.multi_stage.washing_dishes.pre_soak_pan import PreSoakPan
+from robocasa.utils.env_utils import create_env
+import numpy as np
+import imageio
+import matplotlib.pyplot as plt
 
 # First of all you need to modify the config.json file if you want to render online or offline the simulation:
 # 'renderer_onscreen': True to activate online rendering to visualize the simulation
 # 'has_offscreen_renderer': True to save the video offline 
 # 'use_camera_obs': True to take images from obs
 # 'render_camera': None to have the central camera that see all the robot (otherwise use another camera name from the list "Available Cameras")
-  
-
-
-import warnings
-import logging
-warnings.filterwarnings("ignore", category=UserWarning)
-logging.getLogger("glfw").setLevel(logging.ERROR)
+#  'video_saving': to save the video as trial.mp4 inside the simulations directory
 
 # Adjust this path to where your robocasa directory is
 current_dir = os.path.dirname(os.path.abspath(__file__)) 
@@ -28,52 +28,21 @@ os.makedirs(saving_path, exist_ok=True)
 sys.path.append(robocasa_path)
 sys.path.append(robosuite_path)
 
-with open(repo_dir+"\\config.json", "r") as f:
+# Reading of the json config file
+with open(repo_dir+"/config.json", "r") as f:
     config = json.load(f)
-
-#from robocasa.environments import ALL_KITCHEN_ENVIRONMENTS
-#from robocasa.environments.kitchen.kitchen import Kitchen
-from robocasa.environments.kitchen.multi_stage.washing_dishes.pre_soak_pan import PreSoakPan
-from robocasa.utils.env_utils import create_env
-import numpy as np
-import imageio
-import matplotlib.pyplot as plt
 
 # You can put True/False for video_saving flag to save or not a video of your simulation
 if sys.platform.startswith("win"):
     print("\nOS: Windows!\n")
-    video_saving = True # For Windows systems tested and works!
+    video_saving = config["video_saving"] # For Windows systems tested and works!
 elif sys.platform == "darwin":
     print("\nOS: MacOS\n")
-    video_saving = True  # For M1 systems tested and works!
+    video_saving = config["video_saving"]  # For M1 systems tested and works!
 elif sys.platform == "linux":
     print("\nOS: Linux\n")
-    video_saving = True # For Linux systems tested and works!
+    video_saving = config["video_saving"] # For Linux systems tested and works!
 
-'''
-controller_config = {
-    "type": "BASIC",
-    "input_max": 1.0,
-    "input_min": -1.0,
-    "output_max": [0.1] * 6,
-    "output_min": [-0.1] * 6,
-    "kp": 150,
-    "damping": 1.0,
-    "control_delta": True,
-    "interpolation": None,
-    "policy_freq": 20,
-}
-'''
-
-'''
-# set the camera parameters
-renderer_configuration={
-    "lookat":[0,0,0],
-    "azimuth":180,
-    "elevation":-30,
-    "distance":22.5
-    }
-'''
 
 env = PreSoakPan(
     robots="GR1FixedLowerBody", #type of the robot ["GR1", "GR1FixedLowerBody", "GR1FloatingBase", ""]
