@@ -9,8 +9,7 @@ import json
 # 'use_camera_obs': True to take images from obs
 # 'render_camera': None to have the central camera that see all the robot (otherwise use another camera name from the list "Available Cameras")
   
-with open("config.json", "r") as f:
-    config = json.load(f)
+
 
 import warnings
 import logging
@@ -28,6 +27,9 @@ video_name = 'trial.mp4'
 os.makedirs(saving_path, exist_ok=True)
 sys.path.append(robocasa_path)
 sys.path.append(robosuite_path)
+
+with open(repo_dir+"\\config.json", "r") as f:
+    config = json.load(f)
 
 #from robocasa.environments import ALL_KITCHEN_ENVIRONMENTS
 #from robocasa.environments.kitchen.kitchen import Kitchen
@@ -124,7 +126,7 @@ print(env.action_spec[1].tolist())
 
  
 # Loop of sampling-action
-for i in range(500):
+for i in range(50):
     action = np.random.randn(*env.action_spec[0].shape) * 0.1
 
     obs, reward, done, info = env.step(action)  # take action in the environment
