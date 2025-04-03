@@ -124,6 +124,14 @@ cd ..
 git clone https://github.com/cybernetic-m/rl_project.git
 ```
 
+If the simulation does not start, you may need to do ONE of these two commands:
+```sh 
+pip install imageio[ffmpeg]
+```
+```sh 
+pip install imageio[pyav]
+```
+
 
 
 
