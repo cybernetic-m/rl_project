@@ -1,5 +1,22 @@
 import os 
 import sys
+import json
+
+
+# First of all you need to modify the config.json file if you want to render online or offline the simulation:
+# 'renderer_onscreen': True to activate online rendering to visualize the simulation
+# 'has_offscreen_renderer': True to save the video offline 
+# 'use_camera_obs': True to take images from obs
+# 'render_camera': None to have the central camera that see all the robot (otherwise use another camera name from the list "Available Cameras")
+  
+with open("config.json", "r") as f:
+    config = json.load(f)
+
+import warnings
+import logging
+warnings.filterwarnings("ignore", category=UserWarning)
+logging.getLogger("glfw").setLevel(logging.ERROR)
+
 # Adjust this path to where your robocasa directory is
 current_dir = os.path.dirname(os.path.abspath(__file__)) 
 repo_dir = os.path.abspath(os.path.join(current_dir, '..'))
@@ -11,7 +28,6 @@ video_name = 'trial.mp4'
 os.makedirs(saving_path, exist_ok=True)
 sys.path.append(robocasa_path)
 sys.path.append(robosuite_path)
-
 
 #from robocasa.environments import ALL_KITCHEN_ENVIRONMENTS
 #from robocasa.environments.kitchen.kitchen import Kitchen
@@ -57,14 +73,13 @@ renderer_configuration={
     }
 '''
 
-renderer_on_screen=False
 env = PreSoakPan(
-    robots="GR1FixedLowerBody", #type of the robot ["GR1"]
+    robots="GR1FixedLowerBody", #type of the robot ["GR1", "GR1FixedLowerBody", "GR1FloatingBase", ""]
     #controller_configs=controller_config,
-    has_renderer=renderer_on_screen, # True to activate online rendering to visualize the simulation
-    has_offscreen_renderer=True, # True to save the video offline 
-    use_camera_obs=True, # True to take images from obs
-    render_camera=None, # None to have the central camera that see all the robot (otherwise use another camera name from the list "Available Cameras")
+    has_renderer=config['has_render'], 
+    has_offscreen_renderer=config['has_offscreen_renderer'], 
+    use_camera_obs=config['use_camera_obs'], 
+    render_camera=config['render_camera'], 
     #control_freq=20,
     #renderer_config=renderer_configuration,
     seed=1, # the seed to change kitchen form
@@ -115,7 +130,7 @@ for i in range(500):
     obs, reward, done, info = env.step(action)  # take action in the environment
 
     #obs['robot0_robotview_image']
-    if renderer_on_screen:
+    if config['has_render']:
         env.render()  # render on display
     
     if video_saving:
