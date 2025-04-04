@@ -99,7 +99,10 @@ for i in range(50):
     action = np.random.randn(*env.action_spec[0].shape) * 0.1
 
     obs, reward, done, info = env.step(action)  # take action in the environment
-
+    if i==0:
+        img_flipped = np.flipud(obs["robot0_robotview_image"]) #we need to flip the observation from the camera
+        plt.imshow(img_flipped)#256,256,3
+        plt.show()
     #obs['robot0_robotview_image']
     if config['has_render']:
         env.render()  # render on display
@@ -110,6 +113,7 @@ for i in range(50):
             width=640, height=480,
             depth=False
         )
+        frame = np.flipud(frame) #we need to flip the image
         video_writer.append_data(frame)
 
 # Another loop for saving a video
