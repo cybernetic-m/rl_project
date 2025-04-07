@@ -1,6 +1,7 @@
 import os 
 import sys
 import json
+import pprint
 #from robocasa.environments import ALL_KITCHEN_ENVIRONMENTS
 #from robocasa.environments.kitchen.kitchen import Kitchen
 from robocasa.environments.kitchen.multi_stage.washing_dishes.pre_soak_pan import PreSoakPan
@@ -15,6 +16,11 @@ import matplotlib.pyplot as plt
 # 'use_camera_obs': True to take images from obs
 # 'render_camera': None to have the central camera that see all the robot (otherwise use another camera name from the list "Available Cameras")
 #  'video_saving': to save the video as trial.mp4 inside the simulations directory
+
+# Description of the action space and observation space for GR1 Robot:
+# Action Space
+# Ex. action = [inf, inf, inf, inf, inf, inf, inf, inf, inf, inf, inf, inf, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+# First 12 values can go from (-inf, +inf) because they are the 
 
 # Adjust this path to where your robocasa directory is
 current_dir = os.path.dirname(os.path.abspath(__file__)) 
@@ -100,22 +106,28 @@ print("\nMinimum values of actions:\n")
 print(env.action_spec[0].tolist())
 
 # Print of the maximum values of actions
-print("\nMinimum values of actions:\n")
+print("\nMaximum values of actions:\n")
 print(env.action_spec[1].tolist())
+
+# Print of all details of controller
+print("\n Details of the controller:\n")
+pprint.pprint(env.robots[0].part_controller_config)
 
  
 # Loop of sampling-action
 for i in range(50):
-    action = np.random.randn(*env.action_spec[0].shape) * 0.1
-
+    
+    action = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) 
+    
     obs, reward, done, info = env.step(action)  # take action in the environment
+    
     '''
     if i==0:
         img_flipped = np.flipud(obs["robot0_robotview_image"]) #we need to flip the observation from the camera
         plt.imshow(img_flipped)#256,256,3
-        plt.show()'
+        plt.show()
     '''
-    #obs['robot0_robotview_image']
+
     if config['has_render']:
         env.render()  # render on display
     
