@@ -36,12 +36,15 @@ with open(repo_dir+"/config.json", "r") as f:
 if sys.platform.startswith("win"):
     print("\nOS: Windows!\n")
     video_saving = config["video_saving"] # For Windows systems tested and works!
+    mac_os_flag = False
 elif sys.platform == "darwin":
     print("\nOS: MacOS\n")
     video_saving = config["video_saving"]  # For M1 systems tested and works!
+    mac_os_flag = True
 elif sys.platform == "linux":
     print("\nOS: Linux\n")
     video_saving = config["video_saving"] # For Linux systems tested and works!
+    mac_os_flag = False
 
 
 env = PreSoakPan(
@@ -50,7 +53,7 @@ env = PreSoakPan(
     has_renderer=config['has_render'], 
     has_offscreen_renderer=config['has_offscreen_renderer'], 
     use_camera_obs=config['use_camera_obs'], 
-    render_camera=config['render_camera'], 
+    render_camera=config['render_camera'] if not mac_os_flag else "robot0_frontview", 
     #control_freq=20,
     #renderer_config=renderer_configuration,
     seed=1, # the seed to change kitchen form
@@ -62,6 +65,13 @@ env = PreSoakPan(
 
 # reset the environment
 obs_0 = env.reset() 
+
+# Only for MacOS users, for problem in offscreen rendering (M1 tested)
+if mac_os_flag:
+    cam_id = env.sim.model.camera_name2id("robot0_frontview")  # Take the camera ID from the camera name
+    # Set custom position and orientation (example: looking at robot from above)
+    env.sim.model.cam_pos[cam_id] = [2.0, 0.0, 0.5]  # x, y, z
+    env.sim.model.cam_quat[cam_id] = [0.5, 0.5, 0.5, 0.5] # quaternion values
 
 # Print of the obs space dim
 # obs is an ordered dictionary of the type "sensor": "value"
@@ -99,10 +109,12 @@ for i in range(50):
     action = np.random.randn(*env.action_spec[0].shape) * 0.1
 
     obs, reward, done, info = env.step(action)  # take action in the environment
+    '''
     if i==0:
         img_flipped = np.flipud(obs["robot0_robotview_image"]) #we need to flip the observation from the camera
         plt.imshow(img_flipped)#256,256,3
-        plt.show()
+        plt.show()'
+    '''
     #obs['robot0_robotview_image']
     if config['has_render']:
         env.render()  # render on display
