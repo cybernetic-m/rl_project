@@ -38,6 +38,10 @@ sys.path.append(robosuite_path)
 with open(repo_dir+"/config.json", "r") as f:
     config = json.load(f)
 
+# Reading of the json config file
+with open(repo_dir+"/controller_config.json", "r") as f:
+    controller_config = json.load(f)
+
 # You can put True/False for video_saving flag to save or not a video of your simulation
 if sys.platform.startswith("win"):
     print("\nOS: Windows!\n")
@@ -54,23 +58,23 @@ elif sys.platform == "linux":
 
 
 env = PreSoakPan(
-    robots="GR1FixedLowerBody", #type of the robot ["GR1", "GR1FixedLowerBody", "GR1FloatingBase", ""]
-    #controller_configs=controller_config,
+    robots="GR1FixedLowerBody", #type of the robot ["GR1", "GR1FixedLowerBody", "GR1FloatingBody"...]
+    controller_configs=controller_config,
     has_renderer=config['has_render'], 
     has_offscreen_renderer=config['has_offscreen_renderer'], 
     use_camera_obs=config['use_camera_obs'], 
     render_camera=config['render_camera'] if not mac_os_flag else "robot0_frontview", 
-    #control_freq=20,
-    #renderer_config=renderer_configuration,
     seed=1, # the seed to change kitchen form
     init_robot_base_pos="sink", # where to start the robot
     layout_ids=-3, # island in the kitchen
     style_ids=9,# color and style on the kithen
-    camera_names=["robot0_robotview"], # Camera for the camera_obs
+    camera_names=["robot0_robotview"], # Camera for the camera_obs,
 )
 
 # reset the environment
 obs_0 = env.reset() 
+robot = env.robots[0]
+
 
 # Only for MacOS users, for problem in offscreen rendering (M1 tested)
 if mac_os_flag:
@@ -99,7 +103,7 @@ if video_saving:
 
 # env.action_spec is a tuple (action_low, action_high) 
 # where action_low is the minimum value of an action, action high is the maximum value
-print("\nThe action space dim is:", len(env.action_spec[0]))
+print("\nThe action space dim is:", robot.action_dim)
 
 # Print of the minimum values of actions
 print("\nMinimum values of actions:\n")
@@ -109,16 +113,17 @@ print(env.action_spec[0].tolist())
 print("\nMaximum values of actions:\n")
 print(env.action_spec[1].tolist())
 
-# Print of all details of controller
-print("\n Details of the controller:\n")
-pprint.pprint(env.robots[0].part_controller_config)
+
+#print(env.robots[0].js_energy)
+#print(env.robots[0]._joint_positions)
 
  
 # Loop of sampling-action
-for i in range(50):
+for i in range(500):
     
-    action = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) 
-    
+    action = np.array([0.05, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) 
+    #action = np.zeros(env.action_spec[0].shape)
+
     obs, reward, done, info = env.step(action)  # take action in the environment
     
     '''
