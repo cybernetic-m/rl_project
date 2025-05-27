@@ -153,7 +153,7 @@ pip install imageio[pyav]
 ## Authors
 Massimo Romano (2043836) (https://github.com/cybernetic-m) 
 
-Luca Del Signore () ()
+Luca Del Signore (2096442) (https://github.com/Puaison)
 
 ## References
 
