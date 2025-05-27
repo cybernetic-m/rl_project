@@ -24,7 +24,7 @@ import imageio
 import matplotlib.pyplot as plt
 
 # Import of ours functions
-from inspData import inspData
+from dataset import inspData, showImage, getObs
 
 # First of all you need to modify the config.json file if you want to render online or offline the simulation:
 # 'renderer_onscreen': True to activate online rendering to visualize the simulation
@@ -50,6 +50,16 @@ dataset_path = robocasa_path + ('/datasets/v0.1/single_stage'
 print("Dataset path:", dataset_path)
 
 inspData(dataset_path)  # Inspect the dataset structure
+
+obs_dict = {}  # Initialize an empty dictionary to store observations
+obs_dict = getObs(dataset_path, obs_dict, demo_name='demo_7')
+
+print("\nObservation dictionary keys:", obs_dict.keys())
+image = obs_dict['images']['right_image']  # Get the left image from the observations (191 x 128 x 128 x 3)
+showImage(image[100], flip=False)  # Show the left image from the dataset
+
+joint_pos = obs_dict['joint']['joint_pos']  # Get the joint positions
+print("\nJoint positions shape:", joint_pos[0])  # Print the shape of joint positions
 
 '''
 # Reading of the json config file
