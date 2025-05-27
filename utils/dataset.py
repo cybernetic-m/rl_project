@@ -120,3 +120,17 @@ def getActGroup(dataset_path, actions_dict, demo_name='demo_7'):
     } 
 
     return actions_dict
+
+def getAct(dataset_path, actions_dict, demo_name='demo_7'):
+    f = h5py.File(dataset_path, 'r')
+    demo = f['data'][demo_name]
+
+    # Read the observations
+    actions = demo['actions'][:]
+    actions_abs= demo['actions_abs'][:]
+    
+    # Extracting
+    actions_dict['actions'] = {
+        'actions_rel': actions,
+        'actions_abs': actions_abs
+    }
