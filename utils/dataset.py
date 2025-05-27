@@ -134,3 +134,5 @@ def getAct(dataset_path, actions_dict, demo_name='demo_7'):
         'actions_rel': actions,
         'actions_abs': actions_abs
     }
+
+    return actions_dict

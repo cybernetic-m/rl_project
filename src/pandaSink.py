@@ -24,7 +24,7 @@ import imageio
 import matplotlib.pyplot as plt
 
 # Import of ours functions
-from dataset import inspData, showImage, getObs, getAct
+from dataset import inspData, showImage, getObs, getAct, getActGroup
 
 # First of all you need to modify the config.json file if you want to render online or offline the simulation:
 # 'renderer_onscreen': True to activate online rendering to visualize the simulation
@@ -57,7 +57,8 @@ act_dict = {}  # Initialize an empty dictionary to store actions
 # Get observations and actions from the dataset
 obs_dict = getObs(dataset_path, obs_dict, demo_name='demo_7')
 act_dict = getAct(dataset_path, act_dict, demo_name='demo_7')
-print(act_dict)
+act_group = getActGroup(dataset_path, act_dict, demo_name='demo_7')
+
 print("\nObservation dictionary keys:", obs_dict.keys())
 image = obs_dict['images']['right_image']  # Get the left image from the observations (191 x 128 x 128 x 3)
 showImage(image[100], flip=False)  # Show the left image from the dataset
@@ -65,8 +66,13 @@ showImage(image[100], flip=False)  # Show the left image from the dataset
 joint_pos = obs_dict['joint']['joint_pos']  # Get the joint positions
 print("\nJoint positions:", joint_pos[0])  # Print the shape of joint positions
 
-abs_pos = act_dict['absolute']['abs_pose']  # Get the joint positions in sine form
-print("\nAbsolute joint positions :", abs_pos)  # Print the shape of absolute joint positions
+abs_pos = act_dict['actions']['actions_abs']  # Get the joint positions 
+print("\nAbsolute joint positions :", abs_pos[0])  # Print the shape of absolute joint positions
+
+# Print the action group
+print("\nAction group 1:", act_group['absolute']['abs_pos'][0])
+print("\nAction group 2:", act_group['absolute']['abs_rot_6d'][0])
+print("\nAction group 3:", act_group['gripper']['gripper'][0])
 
 '''
 # Reading of the json config file
