@@ -1,5 +1,5 @@
 import h5py
-import matplotlib as plt
+import matplotlib.pyplot as plt
 import numpy as np
 
 def inspData(path, demo_name='demo_7'):
@@ -14,3 +14,10 @@ def inspData(path, demo_name='demo_7'):
 
 def print_structure(name, obj):
     print(name)
+
+def showImage(img,flip=False):
+    if flip:
+        img = np.flipud(img)
+    plt.imshow(img)
+    plt.axis('off')
+    plt.show()
