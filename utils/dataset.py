@@ -81,3 +81,42 @@ def getObs(dataset_path, obs_dict, demo_name='demo_7'):
     }
     
     return obs_dict
+
+def getActions(dataset_path, actions_dict, demo_name='demo_7'):
+    
+    f = h5py.File(dataset_path, 'r')
+    demo = f['data'][demo_name]
+
+    # Read the actions
+    actions = demo['action_dict']
+
+    # Extracting absolute actions
+    abs_pos = actions['abs_pos'][:]
+    abs_rot_6d = actions['abs_rot_6d'][:]
+    abs_rot_axis_angle = actions['abs_rot_axis_angle'][:]
+
+    actions_dict['absolute'] = {
+        'abs_pos': abs_pos,
+        'abs_rot_6d': abs_rot_6d,
+        'abs_rot_axis_angle': abs_rot_axis_angle
+    }
+
+    # Extracting gripper actions
+    gripper_actions = actions['gripper'][:]
+
+    actions_dict['gripper'] = {
+        'gripper': gripper_actions
+    }
+
+    # Extracting relative actions
+    rel_pos = actions['rel_pos'][:]
+    rel_rot_6d = actions['rel_rot_6d'][:]
+    rel_rot_axis_angle = actions['rel_rot_axis_angle'][:]
+
+    actions_dict['relative'] = {
+        'rel_pos': rel_pos,
+        'rel_rot_6d': rel_rot_6d,
+        'rel_rot_axis_angle': rel_rot_axis_angle
+    } 
+
+    return actions_dict
