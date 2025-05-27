@@ -4,7 +4,7 @@ import json
 import pprint
 #from robocasa.environments import ALL_KITCHEN_ENVIRONMENTS
 #from robocasa.environments.kitchen.kitchen import Kitchen
-from robocasa.environments.kitchen.multi_stage.washing_dishes.pre_soak_pan import PreSoakPan
+from robocasa.environments.kitchen.single_stage.kitchen_sink import TurnOnSinkFaucet
 from robocasa.utils.env_utils import create_env
 import numpy as np
 import imageio
@@ -38,9 +38,6 @@ sys.path.append(robosuite_path)
 with open(repo_dir+"/config.json", "r") as f:
     config = json.load(f)
 
-# Reading of the json config file
-with open(repo_dir+"/controller_config.json", "r") as f:
-    controller_config = json.load(f)
 
 # You can put True/False for video_saving flag to save or not a video of your simulation
 if sys.platform.startswith("win"):
@@ -57,9 +54,8 @@ elif sys.platform == "linux":
     mac_os_flag = False
 
 
-env = PreSoakPan(
-    robots="GR1FixedLowerBody", #type of the robot ["GR1", "GR1FixedLowerBody", "GR1FloatingBody"...]
-    controller_configs=controller_config,
+env = TurnOnSinkFaucet(
+    robots="PandaOmron", #type of the robot 
     has_renderer=config['has_render'], 
     has_offscreen_renderer=config['has_offscreen_renderer'], 
     use_camera_obs=config['use_camera_obs'], 
@@ -74,7 +70,6 @@ env = PreSoakPan(
 # reset the environment
 obs_0 = env.reset() 
 robot = env.robots[0]
-
 
 # Only for MacOS users, for problem in offscreen rendering (M1 tested)
 if mac_os_flag:
@@ -113,16 +108,12 @@ print(env.action_spec[0].tolist())
 print("\nMaximum values of actions:\n")
 print(env.action_spec[1].tolist())
 
-
-#print(env.robots[0].js_energy)
-#print(env.robots[0]._joint_positions)
-
- 
+# 
 # Loop of sampling-action
 for i in range(500):
     
-    action = np.array([0.05, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) 
-    #action = np.zeros(env.action_spec[0].shape)
+    #action = np.array([0, 0, 0, 0, 0, 0, 0]) 
+    action = np.zeros(env.action_spec[0].shape)
 
     obs, reward, done, info = env.step(action)  # take action in the environment
     
