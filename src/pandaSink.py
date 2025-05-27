@@ -1,7 +1,20 @@
 import os 
 import sys
+
+# Adjust this path to where your robocasa directory is
+current_dir = os.path.dirname(os.path.abspath(__file__)) 
+repo_dir = os.path.abspath(os.path.join(current_dir, '..'))
+env_dir = os.path.abspath(os.path.join(current_dir, '..', '..'))
+robocasa_path = env_dir + "/robocasa"
+robosuite_path = env_dir + "/robosuite"
+saving_path = repo_dir + '/simulations'
+utils_path = repo_dir + '/utils'
+sys.path.append(robocasa_path)
+sys.path.append(robosuite_path)
+sys.path.append(utils_path)
+
 import json
-import pprint
+#import pprint
 #from robocasa.environments import ALL_KITCHEN_ENVIRONMENTS
 #from robocasa.environments.kitchen.kitchen import Kitchen
 from robocasa.environments.kitchen.single_stage.kitchen_sink import TurnOnSinkFaucet
@@ -9,6 +22,9 @@ from robocasa.utils.env_utils import create_env
 import numpy as np
 import imageio
 import matplotlib.pyplot as plt
+
+# Import of ours functions
+from inspData import inspData
 
 # First of all you need to modify the config.json file if you want to render online or offline the simulation:
 # 'renderer_onscreen': True to activate online rendering to visualize the simulation
@@ -22,18 +38,20 @@ import matplotlib.pyplot as plt
 # Ex. action = [inf, inf, inf, inf, inf, inf, inf, inf, inf, inf, inf, inf, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
 # First 12 values can go from (-inf, +inf) because they are the 
 
-# Adjust this path to where your robocasa directory is
-current_dir = os.path.dirname(os.path.abspath(__file__)) 
-repo_dir = os.path.abspath(os.path.join(current_dir, '..'))
-env_dir = os.path.abspath(os.path.join(current_dir, '..', '..'))
-robocasa_path = env_dir + "/robocasa"
-robosuite_path = env_dir + "/robosuite"
-saving_path = repo_dir + '/simulations'
+# Name of the video to save
 video_name = 'trial.mp4'
 os.makedirs(saving_path, exist_ok=True)
-sys.path.append(robocasa_path)
-sys.path.append(robosuite_path)
 
+# Dataset path
+dataset_path = robocasa_path + ('/datasets/v0.1/single_stage'
+                                '/kitchen_sink/TurnOnSinkFaucet/2024-04-25'
+                                '/demo_gentex_im128_randcams.hdf5')
+
+print("Dataset path:", dataset_path)
+
+inspData(dataset_path)  # Inspect the dataset structure
+
+'''
 # Reading of the json config file
 with open(repo_dir+"/config.json", "r") as f:
     config = json.load(f)
@@ -117,12 +135,12 @@ for i in range(500):
 
     obs, reward, done, info = env.step(action)  # take action in the environment
     
-    '''
+    
     if i==0:
         img_flipped = np.flipud(obs["robot0_robotview_image"]) #we need to flip the observation from the camera
         plt.imshow(img_flipped)#256,256,3
         plt.show()
-    '''
+    
 
     if config['has_render']:
         env.render()  # render on display
@@ -141,3 +159,5 @@ if video_saving:
     print("Saving the video")
     video_writer.close()
     print(f"Video saved in {saving_path} as {video_name}")
+
+    '''
