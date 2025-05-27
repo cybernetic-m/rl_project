@@ -82,7 +82,7 @@ def getObs(dataset_path, obs_dict, demo_name='demo_7'):
     
     return obs_dict
 
-def getActions(dataset_path, actions_dict, demo_name='demo_7'):
+def getActGroup(dataset_path, actions_dict, demo_name='demo_7'):
     
     f = h5py.File(dataset_path, 'r')
     demo = f['data'][demo_name]
